@@ -1,0 +1,67 @@
+buildscript {
+	ext {
+		kotlinVersion = '1.2.10'
+		springBootVersion = '1.5.9.RELEASE'
+		querydslVersion = '4.1.4'
+	}
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+
+		classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:${kotlinVersion}")
+		classpath("org.jetbrains.kotlin:kotlin-allopen:${kotlinVersion}")
+		classpath("org.jetbrains.kotlin:kotlin-noarg:${kotlinVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'kotlin-spring'
+apply plugin: 'kotlin-jpa'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+
+group = 'com.example'
+version = '0.0.1'
+sourceCompatibility = 1.8
+compileKotlin {
+	kotlinOptions.jvmTarget = "1.8"
+}
+compileTestKotlin {
+	kotlinOptions.jvmTarget = "1.8"
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile('org.springframework.boot:spring-boot-starter-data-jpa')
+	compile('org.springframework.boot:spring-boot-starter-web')
+//	compile('org.springframework.boot:spring-boot-starter-jdbc')
+//	compile('org.springframework.boot:spring-boot-starter-security')
+	compile("org.jetbrains.kotlin:kotlin-stdlib-jre8:${kotlinVersion}")
+	compile("org.jetbrains.kotlin:kotlin-reflect:${kotlinVersion}")
+
+	compile("com.querydsl:querydsl-jpa:${querydslVersion}")
+	kapt("com.querydsl:querydsl-apt:${querydslVersion}:jpa")
+
+	compile('com.h2database:h2')
+
+	testCompile('org.springframework.boot:spring-boot-starter-test')
+	testCompile('org.springframework.security:spring-security-test')
+	testCompile('junit:junit')
+	testCompile('com.google.truth:truth')
+	testCompile('com.nhaarman:mockito-kotlin')
+}
+
+idea{
+	module{
+		def kaptMain = file('build/generated/source/kapt/main')
+		sourceDirs += kaptMain
+		generatedSourceDirs += kaptMain
+	}
+}
